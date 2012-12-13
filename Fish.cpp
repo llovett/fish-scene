@@ -28,7 +28,7 @@ void Fish::_this_( double size ) {
 
     // CONSTRUCT PARTS OF THE FISH
     // --> body
-    for ( int i=0; i<4; i++ ) {
+    for ( int i=0; i<8; i++ ) {
 	for ( int j=0; j<4; j++ ) {
 	    for ( int k=0; k<3; k++ ) {
 		fishBody[i][j][k] = size * _fishBody[i][j][k];
@@ -36,7 +36,7 @@ void Fish::_this_( double size ) {
 	}
     }
     // --> dorsal fin
-    for ( int i=0; i<8; i++ ) {
+    for ( int i=0; i<4; i++ ) {
 	for ( int j=0; j<4; j++ ) {
 	    for ( int k=0; k<3; k++ ) {
 		fishDorsal[i][j][k] = size * _fishDorsal[i][j][k];
