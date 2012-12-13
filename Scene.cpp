@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Fish.h"
+#include <GL/glut.h>
 
 Fish fish;
 
@@ -58,6 +59,10 @@ void myIdle(){
   glutPostRedisplay();
 }
 
+void keyPressed(int key, int mX, int mY) {
+    // TODO: a key was pressed
+}
+
 int main(int argc, char *argv[]) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -65,6 +70,7 @@ int main(int argc, char *argv[]) {
   glutCreateWindow( "Fish" );
   glutReshapeFunc(myReshape); 
   glutIdleFunc(myIdle);
+  glutSpecialFunc( keyPressed );
   myInit();
   glutDisplayFunc(display);
 
