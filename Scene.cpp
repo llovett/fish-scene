@@ -4,8 +4,16 @@
 
 Fish fish;
 
+GLfloat PosX = 10.0;
+GLfloat PosY = 1.0;
+GLfloat LaX = 0.0;
+GLfloat LaY = 3.0;
+
 void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  glLoadIdentity();
+  gluLookAt(PosX, PosY, 5.0, LaX, LaY, 3.0, 0.0,  0.0, 1.0);
 
   // glPushMatrix();
   // glRotatef(100.0f, 1.0, 0.0, 0.0);
@@ -35,7 +43,7 @@ void myInit() {
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  gluLookAt(10.0, 1.0, 5.0, 0.0, 3.0, 3.0, 0.0,  0.0, 1.0);
+  gluLookAt(PosX, PosY, 5.0, LaX, LaY, 3.0, 0.0,  0.0, 1.0);
 
   glEnable(GL_AUTO_NORMAL);
   glEnable(GL_MAP2_VERTEX_3);
@@ -59,9 +67,25 @@ void myIdle(){
   glutPostRedisplay();
 }
 
-void keyPressed(int key, int mX, int mY) {
-    // TODO: a key was pressed
+void keyPressed(unsigned char key, int mX, int mY) {
+    switch (key) {
+    case 'w':
+	PosX -= 0.1;
+	break;
+    case 's':
+	PosX += 0.1;
+	break;
+    case 'a':
+	PosY -= 0.1;
+	break;
+    case 'd':
+	PosY += 0.1;
+	break;
+    case ' ':
+	break;
+    }
 }
+
 
 int main(int argc, char *argv[]) {
   glutInit(&argc, argv);
@@ -70,7 +94,7 @@ int main(int argc, char *argv[]) {
   glutCreateWindow( "Fish" );
   glutReshapeFunc(myReshape); 
   glutIdleFunc(myIdle);
-  glutSpecialFunc( keyPressed );
+  glutKeyboardFunc( keyPressed );
   myInit();
   glutDisplayFunc(display);
 
