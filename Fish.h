@@ -17,11 +17,11 @@ private:
     double ani_body, ani_dorsal, ani_fins, ani_tail;
     void renderBody() const;
     void renderDorsal() const;
-    void renderFins() const;
+    void renderFin() const;
     void renderTail() const;
     GLfloat fishDorsal[4][4][3];
     GLfloat fishBody[8][4][3];
-    GLfloat fishFin[2][4][3];
+    GLfloat fishFin[4][3];
     void _this_( double );
 
 public:

@@ -39,10 +39,7 @@ GLfloat _fishBody[8][4][3] = {
     { {0.0, 4.0, 2.0},  {0.0, 3.5, 0.5},    {0.0, 1.0, 1.0}, {0.0, 0.0, 2.0} },
 };
 
-GLfloat _fishFin[2][4][3] = {
-    { {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.5, 1.2, -1.0}, {0.2, -0.2, -1.0} },
-    { {0.2, -0.2, -1.0}, {0.5, 1.2, -1.0}, {0.0, 0.0, 0.0}, {0.0, 1.0, 0.0} }
-};
+GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, {0.2, -0.2, -0.8} };
 
 void Fish::_this_( double size ) {
     this->size = size;
@@ -66,11 +63,9 @@ void Fish::_this_( double size ) {
 	}
     }
     // --> side fins
-    for ( int i=0; i<2; i++ ) {
-	for ( int j=0; j<4; j++ ) {
-	    for ( int k=0; k<3; k++ ) {
-		fishFin[i][j][k] = size * _fishFin[i][j][k];
-	    }
+    for ( int j=0; j<4; j++ ) {
+	for ( int k=0; k<3; k++ ) {
+	    fishFin[j][k] = size * _fishFin[j][k];
 	}
     }
 }
@@ -93,7 +88,11 @@ void Fish::render() const {
     renderDorsal();
     glPopMatrix();
 
-    renderFins();
+    glPushMatrix();
+    glTranslatef( 0.22, 2.2, 1.6 );
+    renderFin();
+    glPopMatrix();
+
     renderTail();
 }
 
@@ -123,29 +122,27 @@ void Fish::renderDorsal() const {
   }
 }
 
-void Fish::renderFins() const {
+void Fish::renderFin() const {
     // Calculate the normals
     GLfloat v1[3] = {
-	fishFin[0][0][0] - fishFin[0][1][0],
-	fishFin[0][0][1] - fishFin[0][1][1],
-	fishFin[0][0][2] - fishFin[0][1][2]
+	fishFin[0][0] - fishFin[1][0],
+	fishFin[0][1] - fishFin[1][1],
+	fishFin[0][2] - fishFin[1][2]
     };
     GLfloat v2[3] = {
-	fishFin[0][1][0] - fishFin[0][2][0],
-	fishFin[0][1][1] - fishFin[0][2][1],
-	fishFin[0][1][2] - fishFin[0][2][2]
+	fishFin[1][0] - fishFin[2][0],
+	fishFin[1][1] - fishFin[2][1],
+	fishFin[1][2] - fishFin[2][2]
     };
     GLfloat *normal = crossProduct(v1, v2);
-    
-    for ( int i=0; i<2; i++ ) {
-	glBegin( GL_POLYGON );
-	for ( int j=0; j<4; j++ ) {
-	    glVertex3f( fishFin[i][j][0],
-			fishFin[i][j][1],
-			fishFin[i][j][3] );
-	}
-	glEnd();
+
+    glBegin( GL_POLYGON );
+    for ( int j=0; j<4; j++ ) {
+	glVertex3f( fishFin[j][0],
+		    fishFin[j][1],
+		    fishFin[j][2] );
     }
+    glEnd();
 
     delete normal;
 }
