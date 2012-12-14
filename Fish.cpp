@@ -89,12 +89,12 @@ void Fish::render() const {
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef( 0.22, 2.2, 1.6 );
+    glTranslatef( 0.15, 2.2, 1.6 );
     renderFin();
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef( -0.22, 2.2, 1.6 );
+    glTranslatef( -0.15, 3.0, 1.6 );
     glRotatef( 180.0, 0.0, 0.0, 1.0 );
     renderFin();
     glPopMatrix();
