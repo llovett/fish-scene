@@ -5,11 +5,14 @@ APPS = scene
 
 all: $(APPS)
 
-fish: Fish.h Fish.cpp
+Matrix.o: Matrix.cpp Matrix.h
+	$(CPP) -c Matrix.cpp -o Matrix.o $(FLAGS) $(LIBS)
+
+Fish.o: Fish.h Fish.cpp
 	$(CPP) -c Fish.cpp -o Fish.o $(FLAGS) $(LIBS)
 
-scene: Scene.h Scene.cpp fish
-	$(CPP) Scene.cpp Fish.o -o $(APPS) $(FLAGS) $(LIBS)
+scene: Scene.h Scene.cpp Fish.o Matrix.o
+	$(CPP) Scene.cpp Fish.o Matrix.o -o $(APPS) $(FLAGS) $(LIBS)
 
 clean:
 	@rm -rf $(APPS)

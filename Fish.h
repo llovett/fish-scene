@@ -10,6 +10,7 @@
 
 #include <GL/glut.h>
 
+/* Fish class declaration */
 class Fish {
 private:
     double size;
@@ -20,6 +21,7 @@ private:
     void renderTail() const;
     GLfloat fishDorsal[4][4][3];
     GLfloat fishBody[8][4][3];
+    GLfloat fishFin[2][4][3];
     void _this_( double );
 
 public:
@@ -28,5 +30,23 @@ public:
     void render() const;
     void update();
 };
+
+/* defines properties for a material */
+typedef struct {
+    GLfloat ambient[4];
+    GLfloat diffuse[4];
+    GLfloat specular[4];
+    GLfloat shininess;
+} mProps;
+
+/* defines properties for lighting */
+typedef struct {
+    GLfloat ambient[4];
+    GLfloat diffuse[4];
+    GLfloat specular[4];
+} lProps;
+
+/* function declarations */
+void setMaterial( mProps* );
 
 #endif
