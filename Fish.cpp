@@ -1,6 +1,7 @@
 #include "Fish.h"
 #include "Matrix.h"
 #include <GL/glut.h>
+#include "TextureLoader.h"
 
 // Materials used to render the Fish
 mProps bodyMaterial = {
@@ -16,7 +17,6 @@ mProps finMaterial = {
     { 0.2, 0.2, 0.2, 1.0 },
     20.0
 };
-
 
 // These are used to model parts of the fish's body
 GLfloat _fishDorsal[4][4][3] = {
@@ -39,7 +39,22 @@ GLfloat _fishBody[8][4][3] = {
     { {0.0, 4.0, 2.0},  {0.0, 3.5, 0.5},    {0.0, 1.0, 1.0}, {0.0, 0.0, 2.0} },
 };
 
+// Used to map textures onto splines
+float texel[2][2][2] = {
+    { {0.0, 0.0}, {1.0, 0.0} },
+    { {0.0, 1.0}, {1.0, 1.0} }
+};
+
 GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, {0.2, -0.2, -0.8} };
+
+void setupSplineTexture( GLfloat ***pixels, int cols, int rows ) {
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, cols, rows, 0, GL_RGB, GL_FLOAT, pixels );
+}
 
 void Fish::_this_( double size ) {
     this->size = size;
@@ -68,6 +83,9 @@ void Fish::_this_( double size ) {
 	    fishFin[j][k] = size * _fishFin[j][k];
 	}
     }
+
+    // Load textures
+    scalesTexture = readPPM( WHEREIS_SCALES );
 }
 
 Fish::Fish( double size ) {
@@ -107,25 +125,27 @@ void Fish::update() {
 }
 
 void Fish::renderBody() const {
-  for ( int i=0; i<2; i++ ) {
-      glMap2f(GL_MAP2_VERTEX_3,
-	      0.0, 1.0, 3, 4,
-	      0.0, 1.0, 12, 4,
-	      &fishBody[i*4][0][0]);
-      glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
-      glEvalMesh2(GL_FILL, 0, 10, 0, 10);
-  }
+    setupSplineTexture( scalesTexture, 512, 512 );
+    glMap2f( GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2, &texel[0][0][0] );
+    for ( int i=0; i<2; i++ ) {
+	glMap2f(GL_MAP2_VERTEX_3,
+		0.0, 1.0, 3, 4,
+		0.0, 1.0, 12, 4,
+		&fishBody[i*4][0][0]);
+	glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
+	glEvalMesh2(GL_FILL, 0, 10, 0, 10);
+    }
 }
 
 void Fish::renderDorsal() const {
-  for ( int i=0; i<2; i++ ) {
-      glMap2f(GL_MAP2_VERTEX_3,
-	      0.0, 1.0, 3, 4,
-	      0.0, 1.0, 12, 2,
-	      &fishDorsal[i*2][0][0]);
-      glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
-      glEvalMesh2(GL_FILL, 0, 10, 0, 10);
-  }
+    for ( int i=0; i<2; i++ ) {
+	glMap2f(GL_MAP2_VERTEX_3,
+		0.0, 1.0, 3, 4,
+		0.0, 1.0, 12, 2,
+		&fishDorsal[i*2][0][0]);
+	glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
+	glEvalMesh2(GL_FILL, 0, 10, 0, 10);
+    }
 }
 
 void Fish::renderFin() const {

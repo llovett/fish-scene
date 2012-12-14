@@ -10,6 +10,8 @@
 
 #include <GL/glut.h>
 
+#define WHEREIS_SCALES "scales.ppm"
+
 /* Fish class declaration */
 class Fish {
 private:
@@ -23,6 +25,7 @@ private:
     GLfloat fishBody[8][4][3];
     GLfloat fishFin[4][3];
     void _this_( double );
+    GLfloat ***scalesTexture;
 
 public:
     Fish( double );
