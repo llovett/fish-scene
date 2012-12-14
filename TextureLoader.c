@@ -76,4 +76,6 @@ GLfloat ***readPPM( const char *filename ) {
     free( line );
     
     fclose( ppm );
+
+    return matrix;
 }

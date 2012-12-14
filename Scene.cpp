@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include "TextureLoader.h"
 
 Fish fish;
 
@@ -99,6 +100,18 @@ int main(int argc, char *argv[]) {
     myInit();
     glutDisplayFunc(display);
     glutMainLoop();
+
+    // GLfloat ***texture = readPPM("test.ppm");
+    // for ( int i=0; i<8; i++ ) {
+    // 	for ( int j=0; j<8; j++ ) {
+    // 	    cout << "( ";
+    // 	    for ( int k=0; k<3; k++ ) {
+    // 		cout << texture[i][j][k] << " ";
+    // 	    }
+    // 	    cout << ")   ";
+    // 	}
+    // 	cout << endl;
+    // }
 }
 
 

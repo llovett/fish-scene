@@ -125,8 +125,8 @@ void Fish::update() {
 }
 
 void Fish::renderBody() const {
-    setupSplineTexture( scalesTexture, 512, 512 );
-    glMap2f( GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2, &texel[0][0][0] );
+    setupSplineTexture( scalesTexture, 2048, 2048 );
+    glMap2f( GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2, &fishBody[0][0][0] );
     for ( int i=0; i<2; i++ ) {
 	glMap2f(GL_MAP2_VERTEX_3,
 		0.0, 1.0, 3, 4,
