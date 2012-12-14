@@ -136,6 +136,7 @@ void Fish::renderFin() const {
     };
     GLfloat *normal = crossProduct(v1, v2);
 
+    glNormal3f( -normal[0], -normal[1], -normal[2] );
     glBegin( GL_POLYGON );
     for ( int j=0; j<4; j++ ) {
 	glVertex3f( fishFin[j][0],
