@@ -93,6 +93,12 @@ void Fish::render() const {
     renderFin();
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef( -0.22, 2.2, 1.6 );
+    glRotatef( 180.0, 0.0, 0.0, 1.0 );
+    renderFin();
+    glPopMatrix();
+
     renderTail();
 }
 
