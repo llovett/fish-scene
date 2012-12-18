@@ -8,7 +8,7 @@ using namespace std;
 /**
  * Returns a 2D array of colors that are in the PPM picture.
  * */
-GLfloat ***readPPM( const char *filename ) {
+GLfloat *readPPM( const char *filename ) {
 
     FILE *ppm = fopen( filename, "r" );
     if ( !ppm ) {
@@ -33,25 +33,11 @@ GLfloat ***readPPM( const char *filename ) {
     sscanf( line, "%d %d", &width, &height );
 
     // Malloc-ing the pixel array
-    GLfloat ***matrix = (GLfloat ***)malloc( width * sizeof(GLfloat**) );
+    GLfloat *matrix = (GLfloat *)malloc( width * height * 3 * sizeof(GLfloat) );
     if ( !matrix ) {
 	perror("malloc");
 	cerr << "Could not create image texture!" << endl;
 	exit( 1 );
-    }
-    for ( int i=0; i < width; i++ ) {
-	matrix[i] = (GLfloat **)malloc( height * sizeof(GLfloat*) );
-	if ( !matrix[i] ) {
-	    perror("malloc");
-	    exit( 1 );
-	}
-	for ( int j=0; j<height; j++ ) {
-	    matrix[i][j] = (GLfloat *)malloc( 3 * sizeof(GLfloat) );
-	    if ( !matrix[i][j] ) {
-		perror("malloc");
-		exit(1);
-	    }
-	}
     }
 
     // Move past max luminosity (it's 256)
@@ -67,9 +53,9 @@ GLfloat ***readPPM( const char *filename ) {
 	    green = atoi( line );
 	    getline( &line, &linesize, ppm );
 	    blue = atoi( line );
-	    matrix[i][j][0] = red / (GLfloat)255.0;
-	    matrix[i][j][1] = green / (GLfloat)255.0;
-	    matrix[i][j][2] = blue / (GLfloat)255.0;
+	    matrix[3*i*height + j*3] = red / (GLfloat)255.0;
+	    matrix[3*i*height + j*3 + 1] = green / (GLfloat)255.0;
+	    matrix[3*i*height + j*3 + 2] = blue / (GLfloat)255.0;
 	}
     }
 

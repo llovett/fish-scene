@@ -7,6 +7,6 @@
 
 #include <GL/glut.h>
 
-GLfloat ***readPPM( const char *filename );
+GLfloat *readPPM( const char *filename );
 
 #endif

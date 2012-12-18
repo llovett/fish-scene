@@ -47,9 +47,9 @@ float texel[2][2][2] = {
 
 GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, {0.2, -0.2, -0.8} };
 
-void setupSplineTexture( GLfloat ***pixels, int cols, int rows ) {
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+void setupSplineTexture( GLfloat *pixels, int cols, int rows ) {
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
@@ -85,7 +85,7 @@ void Fish::_this_( double size ) {
     }
 
     // Load textures
-    scalesTexture = readPPM( WHEREIS_SCALES );
+    scalesTexture = readPPM( TEX_SCALES_LOCATION );
 }
 
 Fish::Fish( double size ) {
@@ -125,7 +125,7 @@ void Fish::update() {
 }
 
 void Fish::renderBody() const {
-    setupSplineTexture( scalesTexture, 2048, 2048 );
+    setupSplineTexture( scalesTexture, TEX_SCALES_DIM, TEX_SCALES_DIM );
     glMap2f( GL_MAP2_TEXTURE_COORD_2, 0.0, 1.0, 2, 2, 0.0, 1.0, 4, 2, &fishBody[0][0][0] );
     for ( int i=0; i<2; i++ ) {
 	glMap2f(GL_MAP2_VERTEX_3,
