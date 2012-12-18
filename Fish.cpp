@@ -53,6 +53,15 @@ GLfloat _fishBody[8][4][3] = {
     { {0.0, 4.0, 2.0},  {0.0, 3.5, 0.5},    {0.0, 1.0, 1.0}, {0.0, 0.0, 2.0} },
 };
 
+// N.B., this needs to be transposed
+GLfloat _fishTail[4][4][3] = {
+    { {0.05, 0.0, -1.0}, {0.0, 0.25, 0.5}, {0.0, 3.0, 0.3}, {0.05, 3.6, -0.57} },
+    { {0.05, 0.0, -0.7}, {0.0, 0.25, 1.3}, {0.0, 3.0, 1.0}, {0.05, 3.6, -0.57} },
+    
+    { {-0.05, 3.6, -0.57}, {0.0, 3.0, 0.3}, {0.0, 0.25, 0.5}, {-0.05, 0.0, -1.0} },
+    { {-0.05, 3.6, -0.57}, {0.0, 3.0, 1.0}, {0.0, 0.25, 1.3}, {-0.05, 0.0, -0.7} }
+};
+
 GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, {0.2, -0.2, -0.8} };
 
 // For modeling quadric objects
@@ -101,6 +110,14 @@ void Fish::_this_( double size ) {
     for ( int j=0; j<4; j++ ) {
 	for ( int k=0; k<3; k++ ) {
 	    fishFin[j][k] = size * _fishFin[j][k];
+	}
+    }
+    // --> tail
+    for ( int i=0; i<4; i++ ) {
+	for ( int j=0; j<4; j++ ) {
+	    for ( int k=0; k<3; k++ ) {
+		fishTail[i][j][k] = size * _fishTail[i][j][k];
+	    }
 	}
     }
 
@@ -239,7 +256,21 @@ void Fish::renderFin() const {
 }
 
 void Fish::renderTail() const {
-    // TODO
+    glPushMatrix();
+    glTranslatef(0, -0.2, 3.9);
+    glRotatef(270, 1, 0, 0);
+
+    setupSplineTexture( finTexture, TEX_FINS_DIM, TEX_FINS_DIM, GL_REPLACE );
+    for ( int i=0; i<2; i++ ) {
+	glMap2f(GL_MAP2_VERTEX_3,
+		0.0, 1.0, 3, 4,
+		0.0, 1.0, 12, 2,
+		&fishTail[i*2][0][0]);
+	glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
+	glEvalMesh2(GL_FILL, 0, 10, 0, 10);
+    }
+
+    glPopMatrix();
 }
 
 void setMaterial( mProps *material ) {

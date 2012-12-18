@@ -27,6 +27,7 @@ private:
     GLfloat fishDorsal[4][4][3];
     GLfloat fishBody[8][4][3];
     GLfloat fishFin[4][3];
+    GLfloat fishTail[4][4][3];
     void _this_( double );
     GLfloat *scalesTexture, *finTexture;
     
