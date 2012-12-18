@@ -18,6 +18,20 @@ mProps finMaterial = {
     20.0
 };
 
+mProps outerEyeMaterial = {
+    { 0.8, 0.0, 0.0, 1.0 },
+    { 0.8, 0.8, 0.8, 1.0 },
+    { 0.7, 0.7, 0.7, 1.0 },
+    50.0
+};
+
+mProps innerEyeMaterial = {
+    { 0.0, 0.0, 0.0, 1.0 },
+    { 0.0, 0.0, 0.0, 1.0 },
+    { 0.7, 0.7, 0.7, 1.0 },
+    50.0
+};    
+
 // These are used to model parts of the fish's body
 GLfloat _fishDorsal[4][4][3] = {
     { {0.05, 0.0, -1.0}, {0.0, 0.25, 0.5}, {0.0, 3.0, 0.3}, {0.05, 3.6, -0.57} },
@@ -39,13 +53,10 @@ GLfloat _fishBody[8][4][3] = {
     { {0.0, 4.0, 2.0},  {0.0, 3.5, 0.5},    {0.0, 1.0, 1.0}, {0.0, 0.0, 2.0} },
 };
 
-// Used to map textures onto splines
-float texel[2][2][2] = {
-    { {0.0, 0.0}, {1.0, 0.0} },
-    { {0.0, 1.0}, {1.0, 1.0} }
-};
-
 GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, {0.2, -0.2, -0.8} };
+
+// For modeling quadric objects
+GLUquadricObj *quad;
 
 void setupPolygonTexture( GLfloat *pixels, int cols, int rows, GLint modulation ) {
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -96,6 +107,9 @@ void Fish::_this_( double size ) {
     // Load textures
     scalesTexture = readPPM( TEX_SCALES_LOCATION );
     finTexture = readPPM( TEX_FINS_LOCATION );
+
+    // Initialize quadrics
+    quad = gluNewQuadric();
 }
 
 Fish::Fish( double size ) {
@@ -144,6 +158,24 @@ void Fish::renderBody() const {
 	glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
 	glEvalMesh2(GL_FILL, 0, 10, 0, 10);
     }
+
+    // Eyes
+    glPushMatrix();
+    glRotatef(80.0, 0, 1, 0);
+    glRotatef(-20, 0, 0, 1);
+    glTranslatef(-3.4, 2.0, 0.75);
+
+    // outer eye
+    setMaterial( &outerEyeMaterial );
+    gluDisk( quad, 0, size * 0.4, 40, 40 );
+    
+    // inner eye
+    setMaterial( &innerEyeMaterial );
+    glPushMatrix();
+    glTranslatef(0, 0, 0.01);
+    gluDisk( quad, 0, size * 0.2, 40, 40 );
+    glPopMatrix();
+    glPopMatrix();
 }
 
 void Fish::renderDorsal() const {
