@@ -12,6 +12,8 @@
 
 #define TEX_SCALES_LOCATION "scales.ppm"
 #define TEX_SCALES_DIM 512
+#define TEX_FINS_LOCATION "fishfin.ppm"
+#define TEX_FINS_DIM 512
 
 /* Fish class declaration */
 class Fish {
@@ -26,8 +28,8 @@ private:
     GLfloat fishBody[8][4][3];
     GLfloat fishFin[4][3];
     void _this_( double );
-    GLfloat *scalesTexture;
-
+    GLfloat *scalesTexture, *finTexture;
+    
 public:
     Fish( double );
     Fish();
