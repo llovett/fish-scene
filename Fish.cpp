@@ -159,11 +159,11 @@ void Fish::renderBody() const {
 	glEvalMesh2(GL_FILL, 0, 10, 0, 10);
     }
 
-    // Eyes
+    //////////// RIGHT EYE
     glPushMatrix();
+    glTranslatef(0.28, 3, 2.5);
     glRotatef(80.0, 0, 1, 0);
-    glRotatef(-20, 0, 0, 1);
-    glTranslatef(-3.4, 2.0, 0.75);
+    glRotatef(-8.0, 1, 0, 0);
 
     // outer eye
     setMaterial( &outerEyeMaterial );
@@ -176,6 +176,25 @@ void Fish::renderBody() const {
     gluDisk( quad, 0, size * 0.2, 40, 40 );
     glPopMatrix();
     glPopMatrix();
+
+    //////////// LEFT EYE
+    glPushMatrix();
+    glTranslatef(-0.28, 3, 2.5);
+    glRotatef(280.0, 0, 1, 0);
+    glRotatef(-8.0, 1, 0, 0);
+
+    // outer eye
+    setMaterial( &outerEyeMaterial );
+    gluDisk( quad, 0, size * 0.4, 40, 40 );
+    
+    // inner eye
+    setMaterial( &innerEyeMaterial );
+    glPushMatrix();
+    glTranslatef(0, 0, 0.01);
+    gluDisk( quad, 0, size * 0.2, 40, 40 );
+    glPopMatrix();
+    glPopMatrix();
+
 }
 
 void Fish::renderDorsal() const {
