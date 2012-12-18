@@ -58,7 +58,7 @@ void myInit() {
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_MAP2_TEXTURE_COORD_2);
 
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(0.1, 0.6, 0.7, 1.0);
   
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -100,18 +100,6 @@ int main(int argc, char *argv[]) {
     myInit();
     glutDisplayFunc(display);
     glutMainLoop();
-
-    // GLfloat ***texture = readPPM("test.ppm");
-    // for ( int i=0; i<8; i++ ) {
-    // 	for ( int j=0; j<8; j++ ) {
-    // 	    cout << "( ";
-    // 	    for ( int k=0; k<3; k++ ) {
-    // 		cout << texture[i][j][k] << " ";
-    // 	    }
-    // 	    cout << ")   ";
-    // 	}
-    // 	cout << endl;
-    // }
 }
 
 
