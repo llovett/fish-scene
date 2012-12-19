@@ -17,12 +17,13 @@
 
 // How quickly to update
 #define ANI_BODY_AMNT 0.1
+#define ANI_FINS_AMNT 0.47
 
 /* Fish class declaration */
 class Fish {
 private:
     double size;
-    double ani_body, ani_dorsal, ani_fins, ani_tail;
+    double ani_body, ani_fins;
     void renderBody() const;
     void renderDorsal() const;
     void renderFin() const;

@@ -72,6 +72,7 @@ GLfloat FinPos;
 GLfloat TailRot;
 GLfloat TailPos;
 GLfloat EyePos;
+GLfloat FinFlap;
 
 void setupPolygonTexture( GLfloat *pixels, int cols, int rows, GLint modulation ) {
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -93,7 +94,7 @@ void setupSplineTexture( GLfloat *pixels, int cols, int rows, GLint modulation )
 
 void Fish::_this_( double size ) {
     this->size = size;
-    this->ani_body = this->ani_dorsal = this->ani_fins = this->ani_tail= 0.0;
+    this->ani_body = this->ani_fins = 0.0;
 
     // CONSTRUCT PARTS OF THE FISH
     // --> body
@@ -156,12 +157,14 @@ void Fish::render() const {
     glPushMatrix();
     glTranslatef( -0.2 - FinPos, 2.2, 1.6 );
     glRotatef(FinRot + 10, 0, 0, 1);
+    glRotatef(FinFlap, 0, 1, 0);
     renderFin();
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef( -0.35 - FinPos, 2.8, 0.9 );
     glRotatef(FinRot, 0, 0, 1);
+    glRotatef(-FinFlap, 0, 1, 0);
     glTranslatef(-0.2, 0.2, 0.8);
     glRotatef( 180.0, 0.0, 0.0, 1.0 );
     renderFin();
@@ -177,6 +180,7 @@ void Fish::render() const {
 void Fish::update() {
     // Increment animation counters here
     this->ani_body += ANI_BODY_AMNT;
+    this->ani_fins += ANI_FINS_AMNT;
 
     // Redefine splines
     // --> fish body
@@ -210,6 +214,7 @@ void Fish::update() {
     FinPos = (sin( this->ani_body ) - 0.5) * 0.15;
     TailRot = (sin( this->ani_body ) - 0.5) * 15.0;
     TailPos = (sin( this->ani_body ) - 0.5) * 0.1;
+    FinFlap = (sin( this->ani_fins ) - 0.5) * 5;
 }
 
 void Fish::renderBody() const {
