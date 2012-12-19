@@ -15,6 +15,9 @@
 #define TEX_FINS_LOCATION "fishfin.ppm"
 #define TEX_FINS_DIM 512
 
+// How quickly to update
+#define ANI_BODY_AMNT 0.1
+
 /* Fish class declaration */
 class Fish {
 private:

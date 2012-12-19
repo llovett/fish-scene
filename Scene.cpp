@@ -22,6 +22,7 @@ void display() {
     // glPushMatrix();
     // glRotatef(100.0f, 1.0, 0.0, 0.0);
     // glTranslatef(0.0, 0.0, -1.5);
+    fish.update();
     fish.render();
     // glPopMatrix();
 

@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include <GL/glut.h>
 #include "TextureLoader.h"
+#include <cmath>
 
 // Materials used to render the Fish
 mProps bodyMaterial = {
@@ -163,6 +164,29 @@ void Fish::render() const {
 
 void Fish::update() {
     // Increment animation counters here
+    this->ani_body += ANI_BODY_AMNT;
+
+    // Redefine splines
+    // --> fish body
+    for ( int i=0; i<4; i++ ) {
+	GLfloat origVal = _fishBody[i][1][0] * this->size;
+	this->fishBody[i][1][0] = origVal + sin( this->ani_body ) - 0.5;
+	origVal = _fishBody[i][2][0] * this->size;
+	this->fishBody[i][2][0] = origVal - sin( this->ani_body ) - 0.5;
+    }
+    for ( int i=4; i<8; i++ ) {
+	GLfloat origVal = _fishBody[i][1][0] * this->size;
+	this->fishBody[i][1][0] = origVal - sin( this->ani_body ) - 0.5;
+	origVal = _fishBody[i][2][0] * this->size;
+	this->fishBody[i][2][0] = origVal + sin( this->ani_body ) - 0.5;
+    }
+    // --> dorsal fin
+    for ( int i=0; i<4; i++ ) {
+	GLfloat origVal = _fishDorsal[i][1][0] * this->size;
+	this->fishDorsal[i][1][0] = origVal - sin( this->ani_body ) - 0.5;
+	origVal = _fishDorsal[i][2][0] * this->size;
+	this->fishDorsal[i][1][0] = origVal + sin( this->ani_body ) - 0.5;
+    }
 }
 
 void Fish::renderBody() const {
