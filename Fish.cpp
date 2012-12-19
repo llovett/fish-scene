@@ -68,6 +68,7 @@ GLUquadricObj *quad;
 // For tracking animation
 GLfloat EyeRot;
 GLfloat FinRot;
+GLfloat FinPos;
 GLfloat TailRot;
 GLfloat EyePos;
 
@@ -152,13 +153,17 @@ void Fish::render() const {
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef( 0.15, 2.2, 1.6 );
+    glTranslatef( -0.2 - FinPos, 2.2, 1.6 );
+    glRotatef(FinRot + 10, 0, 0, 1);
     renderFin();
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef( -0.15, 3.0, 1.6 );
+    glTranslatef( -0.35 - FinPos, 2.8, 0.9 );
+    glRotatef(FinRot, 0, 0, 1);
+    glTranslatef(-0.2, 0.2, 0.8);
     glRotatef( 180.0, 0.0, 0.0, 1.0 );
+
     renderFin();
     glPopMatrix();
 
@@ -197,6 +202,8 @@ void Fish::update() {
     // --> eyes
     EyeRot = (sin( this->ani_body ) - 0.5) * 10.0;
     EyePos = (sin( this->ani_body ) - 0.5) * 0.2;
+    FinRot = (sin( this->ani_body ) - 0.5) * 15.0;
+    FinPos = (sin( this->ani_body ) - 0.5) * 0.15;
 }
 
 void Fish::renderBody() const {
@@ -277,7 +284,7 @@ void Fish::renderFin() const {
     glBegin( GL_POLYGON );
     float sAndt[4][2] = { {0.0,1.0}, {0.0, 0.0}, {1.0,0.0}, {1.0,1.0} };
     for ( int j=0; j<4; j++ ) {
-	glTexCoord2f( sAndt[j][0], sAndt[j][1] );//j/2, j%2 );
+	glTexCoord2f( sAndt[j][0], sAndt[j][1] );
 	glVertex3f( fishFin[j][0],
 		    fishFin[j][1],
 		    fishFin[j][2] );
