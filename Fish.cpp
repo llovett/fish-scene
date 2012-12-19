@@ -70,6 +70,7 @@ GLfloat EyeRot;
 GLfloat FinRot;
 GLfloat FinPos;
 GLfloat TailRot;
+GLfloat TailPos;
 GLfloat EyePos;
 
 void setupPolygonTexture( GLfloat *pixels, int cols, int rows, GLint modulation ) {
@@ -163,11 +164,14 @@ void Fish::render() const {
     glRotatef(FinRot, 0, 0, 1);
     glTranslatef(-0.2, 0.2, 0.8);
     glRotatef( 180.0, 0.0, 0.0, 1.0 );
-
     renderFin();
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(TailPos, 0, 0);
+    glRotatef(-TailRot, 0, 0, 1);
     renderTail();
+    glPopMatrix();
 }
 
 void Fish::update() {
@@ -204,6 +208,8 @@ void Fish::update() {
     EyePos = (sin( this->ani_body ) - 0.5) * 0.2;
     FinRot = (sin( this->ani_body ) - 0.5) * 15.0;
     FinPos = (sin( this->ani_body ) - 0.5) * 0.15;
+    TailRot = (sin( this->ani_body ) - 0.5) * 15.0;
+    TailPos = (sin( this->ani_body ) - 0.5) * 0.1;
 }
 
 void Fish::renderBody() const {
