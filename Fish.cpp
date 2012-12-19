@@ -65,6 +65,12 @@ GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, 
 // For modeling quadric objects
 GLUquadricObj *quad;
 
+// For tracking animation
+GLfloat EyeRot;
+GLfloat FinRot;
+GLfloat TailRot;
+GLfloat EyePos;
+
 void setupPolygonTexture( GLfloat *pixels, int cols, int rows, GLint modulation ) {
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
@@ -186,6 +192,11 @@ void Fish::update() {
 	origVal = _fishDorsal[i][2][0] * this->size;
 	this->fishDorsal[i][2][0] = origVal - 0.75*sin( this->ani_body ) - 0.35;
     }
+
+    // Update rotations for fins, eyes, tail, etc.
+    // --> eyes
+    EyeRot = (sin( this->ani_body ) - 0.5) * 10.0;
+    EyePos = (sin( this->ani_body ) - 0.5) * 0.2;
 }
 
 void Fish::renderBody() const {
@@ -201,9 +212,9 @@ void Fish::renderBody() const {
 
     //////////// RIGHT EYE
     glPushMatrix();
-    glTranslatef(0.28, 3, 2.5);
+    glTranslatef(-EyePos - 0.15, 2.8, 2.5);
     glRotatef(80.0, 0, 1, 0);
-    glRotatef(-8.0, 1, 0, 0);
+    glRotatef(-8.0 - EyeRot, 1, 0, 0);
 
     // outer eye
     setMaterial( &outerEyeMaterial );
@@ -219,9 +230,9 @@ void Fish::renderBody() const {
 
     //////////// LEFT EYE
     glPushMatrix();
-    glTranslatef(-0.28, 3, 2.5);
+    glTranslatef(-EyePos - 0.44, 2.8, 2.5);
     glRotatef(280.0, 0, 1, 0);
-    glRotatef(-8.0, 1, 0, 0);
+    glRotatef(-8.0 + EyeRot, 1, 0, 0);
 
     // outer eye
     setMaterial( &outerEyeMaterial );
