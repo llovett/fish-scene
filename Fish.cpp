@@ -230,7 +230,7 @@ void Fish::renderBody() const {
 
     //////////// LEFT EYE
     glPushMatrix();
-    glTranslatef(-EyePos - 0.44, 2.8, 2.5);
+    glTranslatef(-EyePos - 0.695, 2.8, 2.5);
     glRotatef(280.0, 0, 1, 0);
     glRotatef(-8.0 + EyeRot, 1, 0, 0);
 
