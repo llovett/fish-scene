@@ -34,7 +34,15 @@ private:
     GLfloat fishTail[4][4][3];
     void _this_( double );
     GLfloat *scalesTexture, *finTexture;
-    
+    // For tracking animation
+    GLfloat EyeRot;
+    GLfloat FinRot;
+    GLfloat FinPos;
+    GLfloat TailRot;
+    GLfloat TailPos;
+    GLfloat EyePos;
+    GLfloat FinFlap;
+
 public:
     Fish( double );
     Fish();

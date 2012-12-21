@@ -1,4 +1,4 @@
-FLAGS = -I/usr/include/GL -g 
+FLAGS = -I/usr/include/GL -g
 LIBS = -L/usr/include -lglut -lglui -lGLU -lGL -lm
 CPP=g++
 APPS = scene

@@ -5,26 +5,65 @@
 #include <cstdio>
 #include <cstdlib>
 #include "TextureLoader.h"
+#include <vector>
+#include <ctime>
 
-Fish fish;
+#define FISHROWS 2
+#define FISHCOLS 2
+#define FISHSTACKS 2
+#define SPACING_X 1.5
+#define SPACING_Y 4.5
+#define SPACING_Z 3
 
-GLfloat PosX = 10.0;
-GLfloat PosY = 1.0;
-GLfloat LaX = 0.0;
-GLfloat LaY = 3.0;
+#define POSX 0.0
+#define POSY 20.0
+#define LAX 0.0
+#define LAY 3.0
+#define LAZ 3.0
+
+#define RANDOM(start, range) rand()/(float)RAND_MAX * range + start
+
+using namespace std;
+
+vector<Fish*> school;
+vector< vector<float> > offsets;
+
+
+GLfloat Position = 0.0;
+GLfloat CameraRot = 0.0;
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glLoadIdentity();
-    gluLookAt(PosX, PosY, 5.0, LaX, LaY, 3.0, 0.0,  0.0, 1.0);
+    glPushMatrix();
+    glTranslatef(0, Position, 0);
+    glRotatef(CameraRot, 0, 0, 1);
 
-    // glPushMatrix();
-    // glRotatef(100.0f, 1.0, 0.0, 0.0);
-    // glTranslatef(0.0, 0.0, -1.5);
-    fish.update();
-    fish.render();
-    // glPopMatrix();
+    for ( int i=0; i<FISHROWS; i++ ) {
+    	for ( int j=0; j<FISHCOLS; j++ ) {
+	    for ( int k=0; k<FISHSTACKS; k++ ) {
+		glPushMatrix();
+		int index = i*FISHROWS + j*FISHCOLS + k;
+		glTranslatef(i*SPACING_X + offsets[index][0],
+			     j*SPACING_Y + offsets[index][1],
+			     k*SPACING_Z + offsets[index][2]);
+		Fish *f = school[index];
+		f->update();
+		f->render();
+		glPopMatrix();
+	    }
+    	}
+    }
+    glPopMatrix();
+
+
+    if ( CameraRot < 180 ) {
+	if ( Position >= 12 ) {
+	    CameraRot += 4;
+	} else {
+	    Position += 0.1;
+	}
+    }
 
     glutSwapBuffers();
 }
@@ -48,7 +87,7 @@ void myInit() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(PosX, PosY, 5.0, LaX, LaY, 3.0, 0.0,  0.0, 1.0);
+    gluLookAt(POSX, POSY, 5.0, LAX, LAY, LAZ, 0.0,  0.0, 1.0);
 
     glEnable(GL_AUTO_NORMAL);
     glEnable(GL_MAP2_VERTEX_3);
@@ -65,30 +104,47 @@ void myInit() {
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
     glLightfv(GL_LIGHT0, GL_POSITION, position);
+
+    // Create school of fish, and give them random offsets from each other
+    srand( time(NULL) );
+    for ( int i=0; i<FISHROWS; i++ ) {
+	for ( int j=0; j<FISHCOLS; j++ ) {
+	    for ( int k=0; k<FISHSTACKS; k++ ) {
+		float size = RANDOM( 0.8, 0.2 );
+		school.push_back( new Fish(size) );
+
+		vector<float> fishOffsets;
+		for ( int q=0; q<3; q++ ) {
+		    fishOffsets.push_back( RANDOM(-0.5, 1) );
+		}
+		offsets.push_back( fishOffsets );
+	    }
+	}
+    }
 }
 
 void myIdle(){
     glutPostRedisplay();
 }
 
-void keyPressed(unsigned char key, int mX, int mY) {
-    switch (key) {
-    case 'w':
-	PosX -= 0.1;
-	break;
-    case 's':
-	PosX += 0.1;
-	break;
-    case 'a':
-	PosY -= 0.1;
-	break;
-    case 'd':
-	PosY += 0.1;
-	break;
-    case ' ':
-	break;
-    }
-}
+// void keyPressed(unsigned char key, int mX, int mY) {
+//     switch (key) {
+//     case 'w':
+// 	PosX -= 0.1;
+// 	break;
+//     case 's':
+// 	PosX += 0.1;
+// 	break;
+//     case 'a':
+// 	PosY -= 0.1;
+// 	break;
+//     case 'd':
+// 	PosY += 0.1;
+// 	break;
+//     case ' ':
+// 	break;
+//     }
+// }
 
 int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
@@ -97,7 +153,7 @@ int main(int argc, char *argv[]) {
     glutCreateWindow( "Fish" );
     glutReshapeFunc(myReshape); 
     glutIdleFunc(myIdle);
-    glutKeyboardFunc( keyPressed );
+    // glutKeyboardFunc( keyPressed );
     myInit();
     glutDisplayFunc(display);
     glutMainLoop();

@@ -35,8 +35,8 @@ mProps innerEyeMaterial = {
 
 // These are used to model parts of the fish's body
 GLfloat _fishDorsal[2][4][3] = {
-    { {0.0, 0.0, -1.0}, {0.0, 1, 0.5}, {0.0, 3.0, 0.3}, {0.0, 3.5, -0.45} },//{0.0, 3.6, -0.57} },
-    { {0.0, 0.0, -0.7}, {0.0, 1, 1.3}, {0.0, 3.0, 1.0}, {0.0, 3.5, -0.45} }//{0.0, 3.6, -0.57} },
+    { {0.0, 0.0, -1.0}, {0.0, 1, 0.5}, {0.0, 3.0, 0.3}, {0.0, 3.5, -0.45} },
+    { {0.0, 0.0, -0.7}, {0.0, 1, 1.3}, {0.0, 3.0, 1.0}, {0.0, 3.5, -0.45} }
 };
 
 GLfloat _fishBody[8][4][3] = {
@@ -64,15 +64,6 @@ GLfloat _fishFin[4][3] = { {0.0, 0.0, 0.0}, {0.0, 0.8, 0.0}, {0.35, 0.9, -0.8}, 
 
 // For modeling quadric objects
 GLUquadricObj *quad;
-
-// For tracking animation
-GLfloat EyeRot;
-GLfloat FinRot;
-GLfloat FinPos;
-GLfloat TailRot;
-GLfloat TailPos;
-GLfloat EyePos;
-GLfloat FinFlap;
 
 void setupPolygonTexture( GLfloat *pixels, int cols, int rows, GLint modulation ) {
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -155,14 +146,14 @@ void Fish::render() const {
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef( -0.2 - FinPos, 2.2, 1.6 );
+    glTranslatef( size*-0.2 - FinPos, 2.2, 1.6 );
     glRotatef(FinRot + 10, 0, 0, 1);
     glRotatef(FinFlap, 0, 1, 0);
     renderFin();
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef( -0.35 - FinPos, 2.8, 0.9 );
+    glTranslatef( size*-0.35 - FinPos, 2.8, 0.9 );
     glRotatef(FinRot, 0, 0, 1);
     glRotatef(-FinFlap, 0, 1, 0);
     glTranslatef(-0.2, 0.2, 0.8);
@@ -209,11 +200,11 @@ void Fish::update() {
     // Update rotations for fins, eyes, tail, etc.
     // --> eyes
     EyeRot = (sin( this->ani_body ) - 0.5) * 10.0;
-    EyePos = (sin( this->ani_body ) - 0.5) * 0.2;
+    EyePos = (sin( this->ani_body ) - 0.5) * 0.2 * this->size;
     FinRot = (sin( this->ani_body ) - 0.5) * 15.0;
-    FinPos = (sin( this->ani_body ) - 0.5) * 0.15;
+    FinPos = (sin( this->ani_body ) - 0.5) * 0.15 * this->size;
     TailRot = (sin( this->ani_body ) - 0.5) * 15.0;
-    TailPos = (sin( this->ani_body ) - 0.5) * 0.1;
+    TailPos = (sin( this->ani_body ) - 0.5) * 0.1 * this->size;
     FinFlap = (sin( this->ani_fins ) - 0.5) * 5;
 }
 
@@ -230,7 +221,7 @@ void Fish::renderBody() const {
 
     //////////// RIGHT EYE
     glPushMatrix();
-    glTranslatef(-EyePos - 0.15, 2.8, 2.5);
+    glTranslatef(-EyePos - size*0.12, size*2.8, size*2.5);
     glRotatef(80.0, 0, 1, 0);
     glRotatef(-8.0 - EyeRot, 1, 0, 0);
 
@@ -241,14 +232,14 @@ void Fish::renderBody() const {
     // inner eye
     setMaterial( &innerEyeMaterial );
     glPushMatrix();
-    glTranslatef(0, 0, 0.01);
+    glTranslatef(0, 0, size*0.01);
     gluDisk( quad, 0, size * 0.2, 40, 40 );
     glPopMatrix();
     glPopMatrix();
 
     //////////// LEFT EYE
     glPushMatrix();
-    glTranslatef(-EyePos - 0.695, 2.8, 2.5);
+    glTranslatef(-EyePos - size*0.695, size*2.8, size*2.5);
     glRotatef(280.0, 0, 1, 0);
     glRotatef(-8.0 + EyeRot, 1, 0, 0);
 
@@ -259,7 +250,7 @@ void Fish::renderBody() const {
     // inner eye
     setMaterial( &innerEyeMaterial );
     glPushMatrix();
-    glTranslatef(0, 0, 0.01);
+    glTranslatef(0, 0, size*0.01);
     gluDisk( quad, 0, size * 0.2, 40, 40 );
     glPopMatrix();
     glPopMatrix();
@@ -307,7 +298,7 @@ void Fish::renderFin() const {
 
 void Fish::renderTail() const {
     glPushMatrix();
-    glTranslatef(0, -0.2, 3.9);
+    glTranslatef(0, size*-0.2, size*3.9);
     glRotatef(270, 1, 0, 0);
 
     setupSplineTexture( finTexture, TEX_FINS_DIM, TEX_FINS_DIM, GL_REPLACE );

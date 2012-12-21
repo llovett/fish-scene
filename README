@@ -1,0 +1,20 @@
+README
+
+Main program: Scene
+
+My program displays a small school of fish approaching the camera. When the fish
+reach a certain closeness, the camera turns around to watch the fish from
+behind, and follows the school. The body of each fish is a textured 3D
+spline. The side fins are polygons, and the dorsal fin and tail are 2D
+splines. I wanted to make the background more detailed (make it look more like
+an ocean rather than a solid aqua), but I ran out of time. I might re-submit
+when I get more time to make this look really nice. Also, the program runs more
+slowly than I'd like, but when I turn on any compiler optimization flags, the
+model for my fish bodies explodes. I'm not sure why this is, but it may have
+something to do with the say I'm specifying the spline coordinates for fish
+bodies. Compiling with the given Makefile should produce a nice-looking program,
+though.
+
+I affirm that I adhered to the Honor Code.
+
+Luke
